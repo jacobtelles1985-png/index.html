@@ -913,14 +913,11 @@ footer{background:var(--black);padding:60px 5% 28px;}
     </div>
 
     <!-- FORM -->
-    <form action="https://formsubmit.co/jacobelgallo1985@hotmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New Estimate Request - J&G Pro Building Services">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://jacobelgallo1985.github.io/">
+    <form id="estimateForm" onsubmit="return sendEstimateEmail(event)">
 
 
-      <h3 class="form-title">
+
+<h3 class="form-title">
         REQUEST ESTIMATE
       </h3>
 
@@ -928,18 +925,16 @@ footer{background:var(--black);padding:60px 5% 28px;}
 
         <div class="form-group">
           <label>FULL NAME</label>
-          <input type="text"
-                 name="name"
+          <input
                  placeholder="Your Name"
-                 required>
+                 required id="fullName" name="Full Name" type="text" required>
         </div>
 
         <div class="form-group">
           <label>EMAIL ADDRESS</label>
-          <input type="email"
-                 name="email"
+          <input
                  placeholder="you@email.com"
-                 required>
+                 required id="emailAddress" name="Email Address" type="email" required>
         </div>
 
       </div>
@@ -948,15 +943,14 @@ footer{background:var(--black);padding:60px 5% 28px;}
 
         <div class="form-group">
           <label>PHONE NUMBER</label>
-          <input type="tel"
-                 name="phone"
-                 placeholder="(801) 690-9314" required>
+          <input
+                 placeholder="(801) 690-9314" required id="phoneNumber" name="Phone Number" type="tel" required>
         </div>
 
         <div class="form-group">
           <label>SERVICE</label>
 
-          <select name="service">
+          <select id="serviceType" name="Service" required>
 
             <option>Kitchen & Cabinet Paint</option>
             <option>Bathroom Paint Refresh</option>
@@ -974,9 +968,9 @@ footer{background:var(--black);padding:60px 5% 28px;}
       <div class="form-group">
         <label>PROJECT DETAILS</label>
 
-        <textarea name="message"
+        <textarea
                   placeholder="Tell us about your project..."
-                  required></textarea>
+                  required id="projectDetails" name="Project Details" required></textarea>
       </div>
 
       <!-- FORMSUBMIT -->
@@ -999,7 +993,11 @@ footer{background:var(--black);padding:60px 5% 28px;}
 
       </button>
 
-    </form>
+    
+<div id="thankYouMessage" style="display:none;margin-top:20px;padding:18px;border-radius:14px;background:#e8f6fd;color:#1a1a1a;border:1px solid #4BB8F0;text-align:center;font-weight:600;">
+  Thank you! Your estimate request is ready to send. We appreciate your trust and will contact you soon.
+</div>
+</form>
 
   </div>
 
@@ -2021,6 +2019,46 @@ body{
       });
     });
   });
+</script>
+
+
+<script>
+function sendEstimateEmail(event) {
+  event.preventDefault();
+
+  const fullName = document.getElementById("fullName")?.value.trim() || "";
+  const emailAddress = document.getElementById("emailAddress")?.value.trim() || "";
+  const phoneNumber = document.getElementById("phoneNumber")?.value.trim() || "";
+  const serviceType = document.getElementById("serviceType")?.value || "";
+  const projectDetails = document.getElementById("projectDetails")?.value.trim() || "";
+
+  const subject = "New Estimate Request - J&G Pro Building Services";
+  const body =
+`Hello J&G Pro Building Services,
+
+I would like to request a free estimate.
+
+Full Name: ${fullName}
+Email: ${emailAddress}
+Phone: ${phoneNumber}
+Service: ${serviceType}
+
+Project Details:
+${projectDetails}
+
+Thank you.`;
+
+  const mailtoLink = "mailto:jacobelgallo1985@hotmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+
+  const thankYou = document.getElementById("thankYouMessage");
+  if (thankYou) {
+    thankYou.style.display = "block";
+    thankYou.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  window.location.href = mailtoLink;
+  return false;
+}
 </script>
 
 </body>
